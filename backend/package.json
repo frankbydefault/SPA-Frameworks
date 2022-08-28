@@ -1,0 +1,26 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Api REST",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/frankbydefault/Pagina-web-Frameworks.git"
+  },
+  "author": "Franco Hauva",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/frankbydefault/Pagina-web-Frameworks/issues"
+  },
+  "homepage": "https://github.com/frankbydefault/Pagina-web-Frameworks#readme",
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "connect-multiparty": "^2.2.0",
+    "express": "^4.18.1",
+    "mongoose": "^6.5.3",
+    "validator": "^13.7.0"
+  }
+}
