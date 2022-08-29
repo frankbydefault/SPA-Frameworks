@@ -292,7 +292,66 @@ const controller = {
         }
     },
 
+    //------------------------------------
 
+    geImage: (req, res) => {
+
+        let file = req.params.image;
+        let path_file = `./upload/articles/${file}`;
+
+        fs.access(path_file, (exists) => {
+
+            if (!exists) {
+                return res.sendFile(path.resolve(path_file));
+
+            } else {
+                return res.status(404).send({
+                    status: 'error',
+                    message: 'La imagen no existe o no se puede acceder.'
+                });
+            }
+        });
+    },
+
+    //------------------------------------
+
+    search: (req , res) => {
+
+        //get strig for the search
+        let searchStr = req.params.search;
+
+            //Find or
+            Article.find({'$or':[
+                {'title': {'$regex':searchStr, '$options':'i'}},
+                {'content': {'$regex':searchStr, '$options':'i'}}
+            ]
+
+        })
+        .sort([['date','descending']])
+        .exec((err , articles) => {
+
+            if(err){
+                return res.status(500).send({
+                    status: 'error',
+                    message: 'Error en la peticion.'
+                });
+            }
+
+            if(!articles || articles.length <=0){
+                return res.status(404).send({
+                    status: 'error',
+                    message: 'No hay articulos que coincidan con la busqueda.'
+                });
+            }
+
+            return res.status(200).send({
+                status: 'success',
+                articles
+            });
+        });
+
+        
+    },
 
 };
 
