@@ -13,7 +13,7 @@ let article_routes = require('./routes/article-route');
 
 
 //Middlewares
-app.use(bodyParser.urlencoded({extended:false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 //CORS

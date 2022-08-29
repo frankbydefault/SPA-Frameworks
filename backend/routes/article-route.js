@@ -4,6 +4,8 @@ const express = require('express');
 const ArticleController = require('../controllers/article-controller');
 
 const router = express.Router();
+const multipart = require('connect-multiparty');
+const md_upload = multipart({ uploadDir: './upload/articles' })
 
 //Test Routes
 router.get('/controller-test', ArticleController.test);
@@ -15,5 +17,7 @@ router.get('/articles/:last?', ArticleController.getArticles); // ? is optional 
 router.get('/article/:id', ArticleController.getArticle);
 router.put('/article/:id', ArticleController.update);
 router.delete('/article/:id', ArticleController.delete);
+router.post('/upload-image/:id', md_upload, ArticleController.upload);
+
 
 module.exports = router;

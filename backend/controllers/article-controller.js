@@ -1,7 +1,10 @@
 'use strict'
 
+const e = require('express');
 const validator = require('validator');
 const Article = require('../models/article');
+const fs = require('fs');
+const path = require('path');
 
 const controller = {
 
@@ -206,16 +209,16 @@ const controller = {
         let articleId = req.params.id;
 
         //find and delete
-        Article.findOneAndDelete({_id : articleId}, (err, articleRemoved) => {
+        Article.findOneAndDelete({ _id: articleId }, (err, articleRemoved) => {
 
-            if(err){
+            if (err) {
                 return res.status(500).send({
                     status: 'error',
                     message: 'Error al borrar'
                 });
             }
 
-            if(!articleRemoved){
+            if (!articleRemoved) {
                 return res.status(404).send({
                     status: 'error',
                     message: 'No se pudo borrar el articulo, posiblemente no existe'
@@ -226,9 +229,71 @@ const controller = {
                 status: 'success',
                 article: articleRemoved
             });
-            
+
         });
     },
+
+    //------------------------------------
+
+    upload: (req, res) => {
+
+        //configure connect multi-party module
+
+        //get petition file
+        let file_name = 'Imagen no subida...';
+
+        if (!req.files) {
+            return res.status(404).send({
+                status: 'error',
+                message: file_name
+            });
+        }
+
+        //get name and extension of the file
+        let file_path = req.files.file0.path;
+        let file_split = file_path.split('\\');
+        // On linux or mac
+        // let file_split = file_path.split('/');
+
+        //file name
+        file_name = file_split[2];
+
+        //file extension
+        let extension_split = file_name.split('\.');
+        let file_ext = extension_split[1];
+
+        //validate extension (only images), if valid then delete file
+        if (file_ext != 'png' && file_ext != 'jpg' && file_ext != 'jpeg' && file_ext != 'gif') {
+
+            fs.unlink(file_path, (err) => {
+                return res.status(404).send({
+                    status: 'error',
+                    message: 'La extension de la imagen no es valida.'
+                });
+            });
+
+        } else {
+            //if all valid, Search the article ,assign image and update
+            let articleId = req.params.id;
+            Article.findOneAndUpdate({ _id: articleId }, { image: file_name }, { new: true }, (err, articleUpdated) => {
+
+                if (err || !articleUpdated) {
+                    return res.status(404).send({
+                        status: 'error',
+                        message: 'Error al guardar la imagen de articulo'
+                    });
+                }
+
+                return res.status(200).send({
+                    status: 'success',
+                    article: articleUpdated
+                });
+            });
+        }
+    },
+
+
+
 };
 
 module.exports = controller;
