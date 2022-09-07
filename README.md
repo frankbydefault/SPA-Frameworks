@@ -1,6 +1,6 @@
-# Pagina-web-Frameworks
+# SPA-Frameworks
 
-Simple blog page for learning the basics for a front-end development.
+Simple blog page for learning the basics for front-end development in various frameworks.
 
 ## This proyect is for learning
 
